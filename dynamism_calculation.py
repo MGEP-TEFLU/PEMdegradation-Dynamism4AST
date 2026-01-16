@@ -144,7 +144,7 @@ file_paths = [
 dynamism_matrix = np.array([process_voltage_file(fp) for fp in file_paths])
 
 # Dynamism reference limits (note that this limits can be adapted to each case and each type of signals: current, voltage, power...)
-limits = np.array([2.5, 1.05, 10, 0.05, -0.05])  # indices 0–4
+limits = np.array([2, 1.05, 10, 0.05, -0.05])  # indices 0–4
 
 # Copy to avoid modifying original
 dynamism_with_score = dynamism_matrix.copy()
@@ -155,7 +155,7 @@ divisions = dynamism_with_score / limits
 # --- Special handling for column 0 (mean voltage) ---
 current_vals_col0 = dynamism_with_score[:, 0]
 max_val_col0 = np.nanmax(current_vals_col0)
-divisions[:, 0] = (current_vals_col0 - 1.45) / (max_val_col0 - 1.45)
+divisions[:, 0] = (current_vals_col0 - 1.45) / (limits[1] - 1.45)
 divisions[:, 0] = np.clip(divisions[:, 0], 0, 1)  # clamp between 0–1
 
 # --- Special handling for column 2 (period) ---
@@ -273,4 +273,5 @@ plt.title(f'Degradation vs Dynamism\n2nd order fit: '
 plt.legend(loc='upper left')
 plt.grid(True)
 plt.tight_layout()
+
 plt.show()
